@@ -32,7 +32,8 @@ var Config = structs.Defaultconfig{
 	"post_uri",
 	"get_uri",
 	"query_path_name",
-	"proxy_host:proxy_port/",
+	"proxy_host",
+	"proxy_port",
 	"proxy_user",
 	"proxy_pass",
 	"USER_AGENT",
@@ -106,17 +107,15 @@ func (c *C2Default) CheckIn(ip string, pid int, user string, host string, operat
 	c.QueryPathName = Config.QueryPathName
 
 	// Add proxy info if set
-	if len(Config.ProxyURL) > 0 && !strings.Contains(Config.ProxyURL, "proxy_host:proxy_port/") {
-		c.ProxyURL = Config.ProxyURL
+	if len(Config.ProxyHost) > 0 && len(Config.ProxyPort) > 0 {
+		c.ProxyURL = fmt.Sprintf("%s:%s/", Config.ProxyHost, Config.ProxyPort)
 	} else {
 		c.ProxyURL = ""
 	}
 
-	if !strings.Contains(Config.ProxyUser, "proxy_user") && !strings.Contains(Config.ProxyPass, "proxy_pass") {
-		if len(Config.ProxyUser) > 0 && len(Config.ProxyPass) > 0 {
-			c.ProxyUser = Config.ProxyUser
-			c.ProxyPass = Config.ProxyPass
-		}
+	if len(Config.ProxyUser) > 0 && len(Config.ProxyPass) > 0 {
+		c.ProxyUser = Config.ProxyUser
+		c.ProxyPass = Config.ProxyPass
 	} else {
 		c.ProxyUser = ""
 		c.ProxyPass = ""
