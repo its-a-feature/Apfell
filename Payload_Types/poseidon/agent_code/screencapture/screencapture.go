@@ -3,9 +3,9 @@ package screencapture
 import (
 	"encoding/json"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex
@@ -33,12 +33,11 @@ func Run(task structs.Task, ch chan []ScreenShot) {
 		return
 	}
 
-
-	ch <- result 
+	ch <- result
 	/*for i := 0; i < len(result); i++ {
 		profiles.Profile.SendFileChunks(task, result[i].Data(), ch)
 		time.Sleep(time.Duration(profiles.Profile.SleepInterval()) * time.Second)
 	}*/
-	
+
 	return
 }

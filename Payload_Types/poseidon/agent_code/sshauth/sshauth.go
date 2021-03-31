@@ -4,20 +4,20 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"sync"
-	"time"
-	"portscan"
-	"pkg/utils/structs"
+	"github.com/tmc/scp"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/sync/semaphore"
-	"github.com/tmc/scp"
+	"io/ioutil"
 	"pkg/profiles"
+	"pkg/utils/structs"
+	"portscan"
+	"sync"
+	"time"
 )
 
 var (
 	sshResultChan = make(chan SSHResult)
-	mu sync.Mutex
+	mu            sync.Mutex
 )
 
 // SSHAuthenticator Governs the lock of ssh authentication attempts
@@ -34,23 +34,23 @@ type Credential struct {
 }
 
 type SSHTestParams struct {
-	Hosts      []string `json:"hosts"`
-	Port       int      `json:"port"`
-	Username   string   `json:"username"`
-	Password   string   `json:"password"`
-	PrivateKey string   `json:"private_key"`
-	Command    string   `json:"command"`
-	Source     string   `json:"source"`
-	Destination string  `json:"destination"`
+	Hosts       []string `json:"hosts"`
+	Port        int      `json:"port"`
+	Username    string   `json:"username"`
+	Password    string   `json:"password"`
+	PrivateKey  string   `json:"private_key"`
+	Command     string   `json:"command"`
+	Source      string   `json:"source"`
+	Destination string   `json:"destination"`
 }
 
 type SSHResult struct {
-	Status   string `json:"status"`
-	Success  bool   `json:"success"`
-	Username string `json:"username"`
-	Secret   string `json:"secret"`
-	Output   string `json:"output"`
-	Host     string `json:"host"`
+	Status     string `json:"status"`
+	Success    bool   `json:"success"`
+	Username   string `json:"username"`
+	Secret     string `json:"secret"`
+	Output     string `json:"output"`
+	Host       string `json:"host"`
 	CopyStatus string `json:"copy_status"`
 }
 
@@ -116,35 +116,35 @@ func SSHLogin(host string, port int, cred Credential, debug bool, command string
 		sshResultChan <- res
 		return
 	}
-	if source != "" && destination != ""{
-        err = scp.CopyPath(source, destination, session)
-        if err != nil{
-            res.CopyStatus = "Failed to copy: " + err.Error()
-        }else{
-            res.CopyStatus = "Successfully copied"
-        }
+	if source != "" && destination != "" {
+		err = scp.CopyPath(source, destination, session)
+		if err != nil {
+			res.CopyStatus = "Failed to copy: " + err.Error()
+		} else {
+			res.CopyStatus = "Successfully copied"
+		}
 	}
-	if command != ""{
-        modes := ssh.TerminalModes{
-            ssh.ECHO:   0, //disable echoing
-            ssh.TTY_OP_ISPEED: 14400,
-            ssh.TTY_OP_OSPEED: 14400,
-        }
-        err = session.RequestPty("xterm", 80, 40, modes)
-        if err != nil{
-            res.Success = false
-            res.Status = err.Error()
-            res.Output = "Failed to request PTY"
-            sshResultChan <- res
-            return
-        }
-        output, err := session.Output(command)
-        if err != nil{
+	if command != "" {
+		modes := ssh.TerminalModes{
+			ssh.ECHO:          0, //disable echoing
+			ssh.TTY_OP_ISPEED: 14400,
+			ssh.TTY_OP_OSPEED: 14400,
+		}
+		err = session.RequestPty("xterm", 80, 40, modes)
+		if err != nil {
+			res.Success = false
+			res.Status = err.Error()
+			res.Output = "Failed to request PTY"
+			sshResultChan <- res
+			return
+		}
+		output, err := session.Output(command)
+		if err != nil {
 
-        }
-        res.Output = string(output)
-	}else{
-	    res.Output = ""
+		}
+		res.Output = string(output)
+	} else {
+		res.Output = ""
 	}
 	//session.Close()
 	res.Success = true
@@ -192,11 +192,11 @@ func SSHBruteForce(hosts []string, port int, creds []Credential, debug bool, com
 }
 
 func Run(task structs.Task) {
-	
+
 	params := SSHTestParams{}
 	msg := structs.Response{}
 	msg.TaskID = task.TaskID
-	
+
 	// log.Println("Task params:", string(task.Params))
 	err := json.Unmarshal([]byte(task.Params), &params)
 	if err != nil {
@@ -308,5 +308,5 @@ func Run(task structs.Task) {
 		mu.Unlock()
 		return
 	}
-	
+
 }

@@ -3,9 +3,9 @@ package drives
 import (
 	"encoding/json"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex
@@ -23,7 +23,6 @@ type Drive struct {
 func Run(task structs.Task) {
 	msg := structs.Response{}
 	msg.TaskID = task.TaskID
-	
 
 	res, err := listDrives()
 

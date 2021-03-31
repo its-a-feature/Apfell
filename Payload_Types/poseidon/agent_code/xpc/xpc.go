@@ -2,9 +2,9 @@ package xpc
 
 import (
 	"encoding/json"
-	"sync"
 	"pkg/profiles"
 	"pkg/utils/structs"
+	"sync"
 )
 
 var mu sync.Mutex
@@ -12,13 +12,13 @@ var results json.RawMessage
 var args Arguments
 
 type Arguments struct {
-	Command string `json:"command"`
+	Command     string `json:"command"`
 	ServiceName string `json:"servicename"`
-	Program string `json:"program"`
-	File string `json:"file"`
-	KeepAlive bool `json:"keepalive"`
-	Pid int `json:"pid"`
-	Data string `json:"data"`
+	Program     string `json:"program"`
+	File        string `json:"file"`
+	KeepAlive   bool   `json:"keepalive"`
+	Pid         int    `json:"pid"`
+	Data        string `json:"data"`
 }
 
 func Run(task structs.Task) {
@@ -28,7 +28,7 @@ func Run(task structs.Task) {
 	err := json.Unmarshal([]byte(task.Params), &args)
 
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"

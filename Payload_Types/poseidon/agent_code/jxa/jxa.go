@@ -2,9 +2,9 @@ package jxa
 
 import (
 	"encoding/json"
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex
@@ -37,7 +37,6 @@ func Run(task structs.Task) {
 		return
 	}
 
-	
 	r, err := runCommand(args.Code)
 	if err != nil {
 		msg.UserOutput = err.Error()

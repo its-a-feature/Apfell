@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"os/user"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex
@@ -87,7 +87,7 @@ func Run(task structs.Task) {
 		mu.Unlock()
 		return
 	}
-    msg.UserOutput = string(res)
+	msg.UserOutput = string(res)
 	msg.Completed = true
 
 	resp, _ := json.Marshal(msg)

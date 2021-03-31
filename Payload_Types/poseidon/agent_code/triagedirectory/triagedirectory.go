@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
-	"sync"
 	"pkg/profiles"
 	"pkg/utils/structs"
+	"strings"
+	"sync"
 )
 
 var mu sync.Mutex

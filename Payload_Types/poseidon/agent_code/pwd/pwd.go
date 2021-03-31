@@ -3,10 +3,10 @@ package pwd
 import (
 	"os"
 
+	"encoding/json"
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
-	"encoding/json"
 )
 
 var mu sync.Mutex
@@ -29,7 +29,7 @@ func Run(task structs.Task) {
 		mu.Unlock()
 		return
 	}
-    msg.Completed = true
+	msg.Completed = true
 	msg.UserOutput = dir
 	resp, _ := json.Marshal(msg)
 	mu.Lock()

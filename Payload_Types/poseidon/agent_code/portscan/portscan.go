@@ -7,15 +7,13 @@ import (
 	"strings"
 	"time"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
-
-
 var (
-	mu sync.Mutex
+	mu                sync.Mutex
 	scanResultChannel = make(chan host)
 )
 
@@ -144,7 +142,7 @@ func Run(task structs.Task) {
 		profiles.TaskResponses = append(profiles.TaskResponses, resp)
 		mu.Unlock()
 		return
-	} 
+	}
 	// fmt.Println("Sending on up the data:\n", string(data))
 	msg.UserOutput = string(data)
 	msg.Completed = true

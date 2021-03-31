@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"pkg/utils/structs"
 	"pkg/profiles"
+	"pkg/utils/structs"
 )
 
 var (

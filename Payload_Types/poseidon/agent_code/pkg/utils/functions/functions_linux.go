@@ -4,26 +4,27 @@ package functions
 
 import (
 	"fmt"
-	"unicode/utf16"
-	"os/user"
 	"os"
+	"os/user"
 	"runtime"
+	"unicode/utf16"
 )
 
 func isElevated() bool {
 	currentUser, _ := user.Current()
 	return currentUser.Uid == "0"
 }
-func getArchitecture() string{
-    return runtime.GOARCH
+func getArchitecture() string {
+	return runtime.GOARCH
 }
-func getDomain() string{
-    host, _ := os.Hostname()
-    return host
+func getDomain() string {
+	host, _ := os.Hostname()
+	return host
 }
-func getOS() string{
-    return runtime.GOOS
+func getOS() string {
+	return runtime.GOOS
 }
+
 // Helper function to convert DWORD byte counts to
 // human readable sizes.
 func UINT32ByteCountDecimal(b uint32) string {

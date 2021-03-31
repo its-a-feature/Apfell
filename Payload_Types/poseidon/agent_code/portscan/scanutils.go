@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"pkg/utils/structs"
 	"golang.org/x/sync/semaphore"
+	"pkg/utils/structs"
 )
 
 type PortRange struct {

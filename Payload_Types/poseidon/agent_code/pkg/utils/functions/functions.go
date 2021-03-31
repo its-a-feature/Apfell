@@ -31,12 +31,12 @@ func GetCurrentIPAddress() string {
 func IsElevated() bool {
 	return isElevated()
 }
-func GetArchitecture() string{
-    return getArchitecture()
+func GetArchitecture() string {
+	return getArchitecture()
 }
-func GetDomain() string{
-    return getDomain()
+func GetDomain() string {
+	return getDomain()
 }
-func GetOS() string{
-    return getOS()
+func GetOS() string {
+	return getOS()
 }

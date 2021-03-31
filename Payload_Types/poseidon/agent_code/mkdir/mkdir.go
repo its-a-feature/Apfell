@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	"encoding/json"
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
-	"encoding/json"
 )
 
 var mu sync.Mutex
@@ -29,7 +29,7 @@ func Run(task structs.Task) {
 		return
 	}
 
-    msg.Completed = true
+	msg.Completed = true
 	msg.UserOutput = fmt.Sprintf("Created directory: %s", task.Params)
 	resp, _ := json.Marshal(msg)
 	mu.Lock()

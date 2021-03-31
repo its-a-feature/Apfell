@@ -17,7 +17,7 @@ type EventHandlerFunc func(XpcEvent) bool
 
 type Emitter struct {
 	handlers map[string]EventHandlerFunc
-	event chan XpcEvent
+	event    chan XpcEvent
 }
 
 // Init initialize the emitter and start a goroutine to execute the event handlers
@@ -44,10 +44,10 @@ func (e *Emitter) Init() {
 	}()
 }
 
-func (e *Emitter) Emit(ev XpcEvent)  {
+func (e *Emitter) Emit(ev XpcEvent) {
 	e.event <- ev
 }
 
-func (e *Emitter) On(event string, fn EventHandlerFunc)  {
+func (e *Emitter) On(event string, fn EventHandlerFunc) {
 
 }

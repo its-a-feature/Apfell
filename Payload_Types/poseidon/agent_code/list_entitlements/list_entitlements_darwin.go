@@ -10,9 +10,9 @@ package list_entitlements
 import "C"
 
 type DarwinListEntitlements struct {
-	Successful  bool
-	Message string
-	CodeSign int
+	Successful bool
+	Message    string
+	CodeSign   int
 }
 
 func listEntitlements(pid int) (DarwinListEntitlements, error) {

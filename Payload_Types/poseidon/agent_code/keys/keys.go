@@ -3,9 +3,9 @@ package keys
 import (
 	"encoding/json"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex

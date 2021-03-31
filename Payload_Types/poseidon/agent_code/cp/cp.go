@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sync"
 	"pkg/profiles"
+	"sync"
 
 	"pkg/utils/structs"
 )
@@ -50,7 +50,7 @@ func Run(task structs.Task) {
 	args := &Arguments{}
 	err := json.Unmarshal([]byte(task.Params), args)
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"
@@ -65,7 +65,7 @@ func Run(task structs.Task) {
 	copiedBytes, err := copy(args.Source, args.Destination)
 
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"

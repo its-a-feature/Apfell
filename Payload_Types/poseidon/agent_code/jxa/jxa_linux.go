@@ -7,7 +7,7 @@ import (
 )
 
 type JxaRunLinux struct {
-	Successful bool
+	Successful   bool
 	Resultstring string
 }
 
@@ -18,7 +18,6 @@ func (j *JxaRunLinux) Success() bool {
 func (j *JxaRunLinux) Result() string {
 	return j.Resultstring
 }
-
 
 func runCommand(encpayload string) (JxaRunLinux, error) {
 	n := JxaRunLinux{}

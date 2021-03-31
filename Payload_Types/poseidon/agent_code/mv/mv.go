@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
 )
 
 var mu sync.Mutex

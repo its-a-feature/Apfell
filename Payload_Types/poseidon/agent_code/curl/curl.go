@@ -1,15 +1,15 @@
 package curl
 
 import (
-	"encoding/json"
-	"encoding/base64"
-	"sync"
 	"bytes"
-	"pkg/profiles"
-	"net/http"
+	"encoding/base64"
+	"encoding/json"
 	"io/ioutil"
-	"time"
+	"net/http"
+	"pkg/profiles"
 	"strings"
+	"sync"
+	"time"
 
 	"pkg/utils/structs"
 )
@@ -17,9 +17,9 @@ import (
 var mu sync.Mutex
 
 type Arguments struct {
-	Url string `json:"url"`
-	Method string `json:"method"`
-	Body string `json:"body"`
+	Url     string `json:"url"`
+	Method  string `json:"method"`
+	Body    string `json:"body"`
 	Headers string `json:"headers"`
 }
 
@@ -31,7 +31,7 @@ func Run(task structs.Task) {
 	err := json.Unmarshal([]byte(task.Params), args)
 
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"
@@ -61,11 +61,10 @@ func Run(task structs.Task) {
 	var respBody []byte
 	var req *http.Request
 	if len(body) > 0 {
-		req, _ = http.NewRequest(args.Method, args.Url, bytes.NewBuffer(body))	
+		req, _ = http.NewRequest(args.Method, args.Url, bytes.NewBuffer(body))
 	} else {
 		req, _ = http.NewRequest(args.Method, args.Url, nil)
 	}
-	
 
 	if len(rawHeaders) > 0 {
 		var headers map[string]interface{}
@@ -82,7 +81,7 @@ func Run(task structs.Task) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"
@@ -98,7 +97,7 @@ func Run(task structs.Task) {
 	respBody, err = ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		
+
 		msg.UserOutput = err.Error()
 		msg.Completed = true
 		msg.Status = "error"

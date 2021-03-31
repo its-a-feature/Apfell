@@ -37,12 +37,12 @@ func shellExec(c string) (Shell, error) {
 
 	out, err := cmd.CombinedOutput()
 
-    r.Task = c
-    r.TaskResult = out
+	r.Task = c
+	r.TaskResult = out
 
 	if len(out) == 0 && err == nil {
 		r.TaskResult = []byte("task completed")
-    }
+	}
 
 	return r, err
 }

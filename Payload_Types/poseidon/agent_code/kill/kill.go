@@ -1,14 +1,14 @@
 package kill
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
-	"syscall"
-	"encoding/json"
-	"sync"
 	"pkg/profiles"
 	"pkg/utils/structs"
+	"strconv"
+	"sync"
+	"syscall"
 )
 
 var mu sync.Mutex

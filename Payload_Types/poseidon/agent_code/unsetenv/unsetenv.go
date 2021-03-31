@@ -1,12 +1,12 @@
 package unsetenv
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
 	"pkg/profiles"
 	"pkg/utils/structs"
-	"encoding/json"
+	"strings"
 	"sync"
 )
 

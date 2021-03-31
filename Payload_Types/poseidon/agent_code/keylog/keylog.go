@@ -2,8 +2,8 @@ package keylog
 
 import (
 	"encoding/json"
-	"pkg/profiles"
 	"fmt"
+	"pkg/profiles"
 
 	"keylog/keystate"
 	"pkg/utils/structs"

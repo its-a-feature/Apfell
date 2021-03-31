@@ -1,7 +1,6 @@
 // +build darwin
 package keystate
 
-
 import "errors"
 
 func keyLogger() error {

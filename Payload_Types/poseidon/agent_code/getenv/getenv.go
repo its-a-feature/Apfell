@@ -1,12 +1,12 @@
 package getenv
 
 import (
-	"os"
-	"strings"
 	"encoding/json"
-	"pkg/utils/structs"
-	"sync"
+	"os"
 	"pkg/profiles"
+	"pkg/utils/structs"
+	"strings"
+	"sync"
 )
 
 var mu sync.Mutex
@@ -16,7 +16,7 @@ func Run(task structs.Task) {
 	msg := structs.Response{}
 	msg.TaskID = task.TaskID
 	msg.UserOutput = strings.Join(os.Environ(), "\n")
-	msg.Completed = true 
+	msg.Completed = true
 
 	resp, _ := json.Marshal(msg)
 	mu.Lock()

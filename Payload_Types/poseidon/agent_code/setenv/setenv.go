@@ -1,13 +1,13 @@
 package setenv
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
-	"strings"
-	"encoding/json"
-	"pkg/utils/structs"
-	"sync"
 	"pkg/profiles"
+	"pkg/utils/structs"
+	"strings"
+	"sync"
 )
 
 var mu sync.Mutex

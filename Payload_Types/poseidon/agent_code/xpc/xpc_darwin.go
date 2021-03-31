@@ -15,16 +15,16 @@ package xpc
 import "C"
 
 import (
-	"encoding/json"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
-	"strings"
-	"log"
-	r"reflect"
-	"unsafe"
-	"os"
 	"io/ioutil"
+	"log"
+	"os"
+	r "reflect"
+	"strings"
+	"unsafe"
 )
 
 type XPC struct {
@@ -217,8 +217,6 @@ var (
 	handlers = map[uintptr]XpcEventHandler{}
 )
 
-
-
 func runCommand(command string) ([]byte, error) {
 	switch command {
 	case "list":
@@ -343,7 +341,7 @@ func runCommand(command string) ([]byte, error) {
 				empty := make([]byte, 0)
 				return empty, err
 			}
-	
+
 			return raw, err
 		}
 		break
@@ -369,7 +367,7 @@ func runCommand(command string) ([]byte, error) {
 			m = New(args.ServiceName, 1)
 
 			m.conn.Send(data, false)
-			
+
 		}
 		return []byte("message sent"), nil
 	default:
@@ -589,7 +587,7 @@ func valueToXpc(val r.Value) C.xpc_object_t {
 
 	case r.Interface, r.Ptr:
 		xv = valueToXpc(val.Elem())
- 
+
 	default:
 		log.Fatalf("unsupported %#v", val.String())
 	}

