@@ -613,8 +613,21 @@ async def post_agent_response(agent_message, UUID):
         callback = await db_objects.get(query, agent_callback_id=UUID)
         await send_socks_data(agent_message["socks"], callback)
         agent_message.pop("socks", None)
+
+    if (
+        "rportfwds" in agent_message
+        and agent_message["rportfwds"] != ""
+        and agent_message["rportfwds"] != []
+        and agent_message["rportfwds"] is not None
+    ):
+        from app.api.callback_api import send_rportfwds_data
+        query = await db_model.callback_query()
+        callback = await db_objects.get(query, agent_callback_id=UUID)
+        await send_rportfwds_data(agent_message["rportfwds"], callback)
+        agent_message.pop("rportfwds", None)
     # echo back any additional parameters here as well
     for k in agent_message:
-        if k not in ["action", "responses", "delegates", "socks"]:
+        if k not in ["action", "responses", "delegates", "socks", "rportfwds"]:
             response_message[k] = agent_message[k]
     return response_message
+

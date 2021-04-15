@@ -273,6 +273,8 @@ async def rabbit_pt_rpc_callback(
                 response = await build_payload_from_parameters(request)
             elif request["action"] == "register_payload_on_host":
                 response = await register_payload_on_host(request)
+            elif request["action"] == "control_rportfwd":
+                response = await control_rportfwd(request)
             else:
                 response = {"status": "error", "error": "unknown action"}
             response = json.dumps(response).encode()
@@ -622,6 +624,24 @@ async def control_socks(request):
         return resp
     return {"status": "error", "error": "unknown socks tasking"}
 
+
+async def control_rportfwd(request):
+    task_query = await db_model.task_query()
+    task = await db_objects.get(task_query, id=request["task_id"])
+    if "start" in request:
+        from app.api.callback_api import start_rportfwd
+        resp = await start_rportfwd(request["port"],request["rport"],request["rip"], task.callback, task)
+        return resp
+    if "stop" in request:
+        from app.api.callback_api import stop_rportfwd
+        resp = await stop_rportfwd(request["port"], task.callback, task)
+        return resp
+    if "flush" in request:
+        from app.api.callback_api import flush_rportfwd
+
+        resp = await flush_rportfwd(task.callback, task)
+        return resp
+    return {"status": "error", "error": "unknown rportfwd tasking"}
 
 async def encrypt(callback_uuid: str, data: bytes, with_uuid: bool):
     from app.api.callback_api import get_encryption_data

@@ -443,6 +443,7 @@ async def get_agent_tasks(data, callback):
         data["tasking_size"] = 1
     tasks = []
     socks = []
+    rportfwds = []
     try:
         cur_time = datetime.utcnow()
         callback.last_checkin = cur_time
@@ -517,6 +518,10 @@ async def get_agent_tasks(data, callback):
             from app.api.callback_api import get_socks_data
 
             socks = await get_socks_data(callback)
+
+            from app.api.callback_api import get_rportfwd_data
+
+            rportfwds = await get_rportfwd_data(callback)
         else:
             # operation is complete, just return blank for now, potentially an exit command later
             await db_objects.create(
@@ -534,8 +539,10 @@ async def get_agent_tasks(data, callback):
     response_message = {"action": "get_tasking", "tasks": tasks}
     if len(socks) > 0:
         response_message["socks"] = socks
+    if len(rportfwds) > 0:
+        response_message["rportfwds"] = rportfwds #json format
     for k in data:
-        if k not in ["tasking_size", "action", "delegates", "socks"]:
+        if k not in ["tasking_size", "action", "delegates", "socks","rportfwds"]:
             response_message[k] = data[k]
     return response_message
 
