@@ -12,10 +12,13 @@ for obj in attack["objects"]:
             if "external_id" in ext_ref and ext_ref["source_name"] == "mitre-attack":
                 t_num = ext_ref["external_id"]
                 name = obj["name"]
-                os = " ".join(obj["x_mitre_platforms"])
+                if "x_mitre_platforms" in obj:  # "x_mitre_platform" is now not always present
+                    os = " ".join(obj["x_mitre_platforms"])
+                else:
+                    os = ""
                 tactics = [
                     x["phase_name"]
-                    for x in obj["kill_chain_phases"]
+                    for x in (obj["kill_chain_phases"] if "kill_chain_phases" in obj else []) # Neither is "kill_chain_phases"
                     if x["kill_chain_name"] == "mitre-attack"
                 ]
                 tactics = " ".join(tactics)
